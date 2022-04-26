@@ -28,5 +28,21 @@ namespace ASP_NET_Video_Games_API.Controllers
             var totalSales = _context.VideoGames.Where(s => s.Platform == platName).Select(s => s.GlobalSales).Sum();
             return Ok(totalSales);
         }
+        [HttpGet("names")]
+        public IActionResult GetGameNames()
+        {
+            var videoGameNames = _context.VideoGames.Select(vg => vg.Name).Distinct();
+
+            return Ok(videoGameNames);
+        }
+
+        [HttpGet("gameName/{gameName}")]
+        public IActionResult GetGameInfo(string gameName)
+        {
+            var gameInfo = _context.VideoGames.Where(g => g.Name == gameName);
+
+            return Ok(gameInfo);
+        }
+
     }
 }
