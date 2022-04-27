@@ -1,6 +1,7 @@
 ﻿using ASP_NET_Video_Games_API.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace ASP_NET_Video_Games_API.Controllers
 {
@@ -14,28 +15,19 @@ namespace ASP_NET_Video_Games_API.Controllers
         {
             _context = context;
         }
+
         [HttpGet]
-        public IActionResult GetConsoles()
+        public IActionResult getSalesByConsole()
         {
-            var videoGameConsoles = _context.VideoGames.Select(vg => vg.Platform).Distinct();
+            var consoles = _context.VideoGames.Select(c => c.Platform).Distinct();
 
-            return Ok(videoGameConsoles);
+            Dictionary<string, double> returnRes = new Dictionary<string, double>();
+            foreach (string Platform in consoles.ToList())
+            {
+                var totalSales = _context.VideoGames.Where(s => s.Platform == Platform).Select(s => s.GlobalSales).Sum();
+                returnRes.Add(Platform, totalSales);
+            }
+            return Ok(returnRes);
         }
-
-        [HttpGet("{platName}")]
-        public IActionResult GetSalesByPlatform(string platName)
-        {
-            var totalSales = _context.VideoGames.Where(s => s.Platform == platName).Select(s => s.GlobalSales).Sum();
-            return Ok(totalSales);
-        }
-
-        [HttpGet("gameName/{gameName}")]
-        public IActionResult GetGames(string gameName)
-        {
-            var gameInfo = _context.VideoGames.Where(g => g.Name.Contains(gameName));
-
-            return Ok(gameInfo);
-        }
-
     }
 }
