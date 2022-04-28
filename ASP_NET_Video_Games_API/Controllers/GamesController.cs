@@ -29,5 +29,28 @@ namespace ASP_NET_Video_Games_API.Controllers
             }
             return Ok(returnRes);
         }
+        [HttpGet("{gameName}")]
+        public IActionResult GetGames(string gameName)
+        {
+            
+            var gameInfo = _context.VideoGames.Where(g => g.Name.Contains(gameName));
+
+            return Ok(gameInfo);
+        }
+        [HttpGet]
+        public IActionResult GetGames()
+        {
+            var videoGames = _context.VideoGames;
+            return Ok(videoGames);
+        }
+        //^Get all
+
+        [HttpGet("{id}")]
+        public IActionResult GetGamesById(int id)
+        {
+            var videoGames = _context.VideoGames.Where(g => g.Id == id);
+            return Ok(videoGames);
+        }
+        //^Get by Id
     }
 }
