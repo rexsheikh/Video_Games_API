@@ -37,7 +37,7 @@ namespace ASP_NET_Video_Games_API.Controllers
 
             return Ok(gameInfo);
         }
-        [HttpGet]
+        [HttpGet("allGames")]
         public IActionResult GetGames()
         {
             var videoGames = _context.VideoGames;
@@ -45,12 +45,28 @@ namespace ASP_NET_Video_Games_API.Controllers
         }
         //^Get all
 
-        [HttpGet("{id}")]
+        [HttpGet("id/{id}")]
         public IActionResult GetGamesById(int id)
         {
             var videoGames = _context.VideoGames.Where(g => g.Id == id);
             return Ok(videoGames);
         }
         //^Get by Id
+
+        [HttpGet("shootersByYear")]
+        public IActionResult getShootersByYear()
+        {
+            var years = _context.VideoGames.Where(c => c.Year > 1980).Select(c => c.Year).Distinct();
+
+            Dictionary<double, string> returnRes = new Dictionary<double, string>();
+            foreach (int year in years.ToList())
+            {
+
+                var totalSales = _context.VideoGames.Where(s => s.Genre == "shooter").Where(s => s.Year == year).Select(s => s.GlobalSales).Sum().ToString();
+                returnRes.Add(year, totalSales);
+            }
+            return Ok(returnRes);
+        }
+
     }
 }
