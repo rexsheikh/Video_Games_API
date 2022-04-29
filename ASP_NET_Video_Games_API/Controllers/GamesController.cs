@@ -58,11 +58,11 @@ namespace ASP_NET_Video_Games_API.Controllers
         {
             var years = _context.VideoGames.Where(c => c.Year > 1980).Select(c => c.Year).Distinct();
 
-            Dictionary<double, string> returnRes = new Dictionary<double, string>();
+            Dictionary<int, double> returnRes = new Dictionary<int, double>();
             foreach (int year in years.ToList())
             {
 
-                var totalSales = _context.VideoGames.Where(s => s.Genre == "shooter").Where(s => s.Year == year).Select(s => s.GlobalSales).Sum().ToString();
+                var totalSales = _context.VideoGames.Where(s => s.Genre == "shooter").Where(s => s.Year == year).Select(s => s.GlobalSales).Sum();
                 returnRes.Add(year, totalSales);
             }
             return Ok(returnRes);
