@@ -24,7 +24,7 @@ namespace ASP_NET_Video_Games_API.Controllers
             Dictionary<string, double> returnRes = new Dictionary<string, double>();
             foreach (string Platform in consoles.ToList())
             {
-                var totalSales = _context.VideoGames.Where(s => s.Platform == Platform).Select(s => s.GlobalSales).Sum();
+                var totalSales = _context.VideoGames.Where(s => s.Platform == Platform).Where(s => s.Year > 2013).Select(s => s.GlobalSales).Sum();
                 returnRes.Add(Platform, totalSales);
             }
             return Ok(returnRes);
