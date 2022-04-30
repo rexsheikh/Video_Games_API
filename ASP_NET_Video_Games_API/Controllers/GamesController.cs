@@ -88,6 +88,34 @@ namespace ASP_NET_Video_Games_API.Controllers
             }
             return Ok(returnRes);
         }
+        [HttpGet("rpgsByYear")]
+        public IActionResult getRPGsByYear()
+        {
+            var years = _context.VideoGames.Where(c => c.Year > 1980).Select(c => c.Year).Distinct();
+
+            Dictionary<int, double> returnRes = new Dictionary<int, double>();
+            foreach (int year in years.ToList())
+            {
+
+                var totalSales = _context.VideoGames.Where(s => s.Genre == "Role-Playing").Where(s => s.Year == year).Select(s => s.GlobalSales).Sum();
+                returnRes.Add(year, totalSales);
+            }
+            return Ok(returnRes);
+        }
+        [HttpGet("racingByYear")]
+        public IActionResult getRacingByYear()
+        {
+            var years = _context.VideoGames.Where(c => c.Year > 1980).Select(c => c.Year).Distinct();
+
+            Dictionary<int, double> returnRes = new Dictionary<int, double>();
+            foreach (int year in years.ToList())
+            {
+
+                var totalSales = _context.VideoGames.Where(s => s.Genre == "Racing").Where(s => s.Year == year).Select(s => s.GlobalSales).Sum();
+                returnRes.Add(year, totalSales);
+            }
+            return Ok(returnRes);
+        }
 
 
 
